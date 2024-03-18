@@ -13,7 +13,7 @@ from pathlib import Path
 
 import halo
 import viv_utils
-import rich.traceback
+import rich.tracebackclear
 import viv_utils.flirt
 from vivisect import VivWorkspace
 

@@ -254,6 +254,24 @@ class MemcpyHook:
         emu.writeMemory(dst, data)
         fu.call_return(emu, api, argv, 0)
         return True
+    
+class SnprintfHook:
+    def __call__(self, emu, api, argv):
+        if fu.contains_funcname(api, ("snprintf", "sprintf", "swprintf", "snwprintf")):
+            # Extract arguments
+            buffer, format_, *args = argv
+
+            # Format the string using the provided arguments
+            logger.debug("Format String" +format_)
+
+            
+            emu.writeMemory(buffer, format_)
+            # Return the number of characters written
+            num_chars_written = len(format_)
+            fu.call_return(emu, api, argv, num_chars_written)
+            return True
+
+        return False
 
 
 class StrlenHook:
@@ -398,6 +416,7 @@ DEFAULT_HOOKS = (
     GetLastErrorHook(),
     GetCurrentProcessHook(),
     CriticalSectionHook(),
+    SnprintfHook()
 )
 
 
